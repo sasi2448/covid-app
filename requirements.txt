@@ -63,6 +63,3 @@ webencodings==0.5.1
 widgetsnbextension==3.5.2
 wincertstore==0.2
 zipp==3.6.0
-pymongo==3.3
-
-
