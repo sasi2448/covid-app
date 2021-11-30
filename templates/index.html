@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Covid Prediction</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
+    <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-en_US.js"></script> -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: url(/img/medicalImage.jpg) no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .main-section {
+            /* margin: 0 auto; */
+            margin-left: -200px;
+            padding: 0;
+        }
+
+        .modal-content {
+            background-color: #c7e1fc;
+            opacity: 0.9;
+            padding: 0 18px;
+            border-radius: 50px;
+        }
+
+        .user-img img {
+            height: 100px;
+            width: 100px;
+        }
+
+        .form-group {
+            margin-bottom: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- <header>
+        <nav class="navbar navbar-inverse">
+            <div class="container text-center">
+                <div class="navbar-header  col-md-12">
+                    <a class="navbar-brand text-center" style="color: white"> Covid form </a>
+                </div>
+            </div>
+        </nav>
+    </header> -->
+    <div class="modal-dialog text-center">
+        <div class="col-sm-9 main-section">
+            <div class="modal-content">
+                <div class="col-12 user-img">
+                    <img src="/img/face.png" alt="user-img">
+                </div>
+                <div class="col-12 form-input">
+                    <form action="{{ url_for('predict')}}" class="form-group" method="post">
+                        <div class="form-group">
+                            <form action="result" name="covid_form" id="covid_form">
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-4" for="patientName">Patient Name</label>
+                                    <input type="text" class="form-control col-md-8" id="patientName"
+                                        placeholder="Enter Patient Name" required>
+                                </div>
+                                <div class="radio form-group col-md-12">
+                                    <!-- AGE COLUMN  -->
+
+                                    <label class="col-md-3" for="Gender"><b>Gender </b> </label>
+                                    <label for="Gender_Female"><input type="radio" name="Gender" value="Gender_Female"
+                                            id="Gender_Female">Female</label>
+                                    <label for="Gender_Male"><input type="radio" name="Gender" value="Gender_Male"
+                                            id="Gender_Male">Male</label>
+                                    <label for="Gender_Transgender"><input type="radio" value="Gender_Transgender"
+                                            name="Gender" id="Gender_Transgender">Others</label>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-4" for="age">Patient age</label>
+                                    <select name="age" id="age" class="form-control col-md-8 age_select" required>
+                                        <option selected disabled hidden value="">Nothing selected</option>
+                                        <option value="Age_0-9">0-9</option>
+                                        <option value="Age_10-19">10-19</option>
+                                        <option value="Age_20-24">20-24</option>
+                                        <option value="Age_25-59">25-59</option>
+                                        <option value="Age_60">60+</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-5" for="symptoms">Patient Symptoms</label>
+                                    <select name="symptoms" id="symptoms"
+                                        class="form-control col-md-7 selectpicker btn btn-primary"
+                                        data-live-search="true" multiple required>
+                                        <option value="Fever">Fever</option>
+                                        <option value="Tiredness">Tiredness</option>
+                                        <option value="Dry-Cough">Dry-Cough</option>
+                                        <option value="Difficulty-in-Breathing">Difficulty-in-Breathing</option>
+                                        <option value="Sore-Throat">Sore-Throat</option>
+                                        <option value="None_Sympton">None_Sympton</option>
+                                        <option value="Pains">Pains</option>
+                                        <option value="Nasal-Congestion">Nasal-Congestion</option>
+                                        <option value="Runny-Nose">Runny-Nose</option>
+                                        <option value="Diarrhea">Diarrhea</option>
+                                        <option value="None_Experiencing">None_Experiencing</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-5" for="severity">Symptoms severity</label>
+                                    <select name="severity" id="severity" class="form-control col-md-7 severity_select"
+                                        required>
+                                        <option selected disabled hidden value="">Nothing selected</option>
+                                        <option value="Severity_Mild">Severity_Mild</option>
+                                        <option value="Severity_Moderate">Severity_Moderate</option>
+                                        <option value="Severity_None">Severity_None</option>
+                                        <option value="Severity_Severe">Severity_Severe</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-5" for="contacts">Patient Contacts</label>
+                                    <select name="contacts" id="contacts" class="form-control col-md-7 contact_select"
+                                        required>
+                                        <option selected disabled hidden value="">Nothing selected</option>
+                                        <option value="Contact_Dont-Know">Contact_Dont-Know</option>
+                                        <option value="Contact_No">Contact_No</option>
+                                        <option value="Contact_Yes">Contact_Yes</option>
+                                    </select>
+                                </div>
+                                <button type="submit" id="btnSubmit" class="btn btn-primary">Predict</button>
+                            </form>
+                        </div>
+                        <!-- <div class="container col-md-12 text-center" id="result"> <b>{{prediction_text}}</b>
+                            <b id="result"></b>
+                        </div> -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="container text-center" id="submit">
+        <div class="container col-md-12 text-center" id="result"> <b>{{prediction_text}}</b>
+            <b id="result"></b>
+        </div>
+    </div>
+    <input type="" /> -->
+
+    <!-- <div id="popup1" style="text-align:center;">
+        <div style="margin-top: 70px">
+            <h2 >Is the patient Positive/Negative</h2>
+            <!- <a class="close" href="#">&times;</a> -->
+    <!-- <div id="result" class="content" hidden>
+        <b>{{prediction_text}}</b>
+        <b id="result"></b>
+    </div>
+    </div>
+    </div> -->
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var selected_Symptopms, selected_Age, selected_Severity, selected_Contact, selected_Gender;
+
+            $('.selectpicker').selectpicker({
+                style: 'btn-primary',
+                size: 5
+            });
+            $('.selectpicker').change((e) => {
+                var selected = $(e.target).val();
+                selected_Symptopms = selected;
+            })
+            $('.age_select').change((e) => {
+                var selected = $(e.target).val();
+                selected_Age = selected;
+            })
+            $('.severity_select').change((e) => {
+                var selected = $(e.target).val();
+                selected_Severity = selected
+            })
+            $('.contact_select').change((e) => {
+                var selected = $(e.target).val();
+                selected_Contact = selected;
+            })
+            $("input[name='Gender']").change((e) => {
+                var selected = $(e.target).val();
+                selected_Gender = selected;
+            })
+
+            if(($("input:empty").length == 0)|| ($('input:radio[name=Gender]').is(':checked'))){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Something went wrong',
+                    text: `Please fill all the input fields`
+                })
+            }
+            
+            // if(name && selected_Symptopms && selected_Gender && selected_Age && selected_Contact && selected_Severity){
+                $('#btnSubmit').click(function (e) {
+                e.preventDefault();
+                var name = $("#patientName").val();
+                var postData = {
+                    PatientName: name,
+                    symptoms: selected_Symptopms,
+                    age: selected_Age,
+                    gender: selected_Gender,
+                    severity: selected_Severity,
+                    contact: selected_Contact
+                }
+                console.log("Value is printed from", selected_Symptopms)
+                $.ajax({
+                    url: '/predict',
+                    type: 'POST',
+                    data: {
+                        "Obj": postData
+                    },
+                    success: function (response) {
+                        console.log("Posted successfully", response);
+                        if (response) {
+                            if (response === "Negative") {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Covid Prediction',
+                                    text: `Yaaay...! you are covid ${response}`,
+                                    footer: '<p>Continue following covid protocols and be safe.</p>'
+                                })
+                            } else if (response === "Positive") {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Covid Prediction',
+                                    text: `Opps...! You are covid ${response}`,
+                                    footer: '<p>Please go into isolation & follow covid protocol.</p>'
+                                })
+                            }
+                        }
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                })
+                selected_Symptopms;
+                selected_Age;
+                selected_Severity;
+                selected_Contact;
+                selected_Gender;
+            })
+            // }
+        })
+    </script>
+</body>
+
+</html>
